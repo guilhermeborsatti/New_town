@@ -5,7 +5,7 @@ require_once "src/UsuarioDAO.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    // Upload da foto
+   
     $caminhoFoto = null;
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == 0) {
         $pasta = "uploads/";
