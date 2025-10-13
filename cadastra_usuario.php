@@ -1,22 +1,32 @@
 <?php
-session_start();
+
+
 require_once "src/UsuarioDAO.php";
 
-if ($_POST['usuario'] && $_POST['email'] && $_POST['senha']) {
-    $resultado = UsuarioDAO::cadastrarUsuario($_POST);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    if ($resultado === true) {
-        $_SESSION['msg_success'] = "Cadastro confirmado com sucesso! Faça login.";
-        header("Location: login.php");
-        exit();
-    } else {
-        $_SESSION['msg'] = $resultado;
-        header("Location: index.php");
-        exit();
+    // Upload da foto
+    $caminhoFoto = null;
+    if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == 0) {
+        $pasta = "uploads/";
+        if (!is_dir($pasta)) {
+            mkdir($pasta, 0777, true);
+        }
+        $nomeArquivo = uniqid() . "_" . basename($_FILES['imagem']['name']);
+        $caminhoFoto = $pasta . $nomeArquivo;
+        move_uploaded_file($_FILES['imagem']['tmp_name'], $caminhoFoto);
     }
-} else {
-    $_SESSION['msg'] = "Preencha todos os campos!";
-    header("Location: index.php");
-    exit();
+
+    $dados = [
+        "nome"  => $_POST['nome'] ?? null,
+        "email" => $_POST['email'] ?? null,
+        "senha" => $_POST['senha'] ?? null,
+        "foto"  => $caminhoFoto
+    ];
+
+    UsuarioDAO::cadastrarUsuario($dados);
+
+    echo "✅ Usuário cadastrado com sucesso!";
 }
+
 ?>
