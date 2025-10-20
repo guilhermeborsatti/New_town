@@ -1,58 +1,45 @@
-<?php
-session_start();
-?>
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
-<body class="d-flex align-items-center justify-content-center min-vh-100">
-    <form action="efetua_login.php" method="post" class="w-50 container mt-3 border rounded p-4">
-        <h4 class="text-center">Login</h4>
-        
+
+<!-- <body class="d-flex align-items-center d-flex justify-content-center min-vh-100"> -->
+<body class="d-flex align-items-center" style="height: 100vh;">
+    <form action="efetua-login.php" method="post" class="w-50 container mt-3 border rounded p-3">
+        <h4>Login</h4>
         <?php
-        // Mostrar mensagem de sucesso do cadastro
-        if (isset($_SESSION['msg_success'])) {
-            echo '<div class="alert alert-success" role="alert">';
-            echo $_SESSION['msg_success'];
-            unset($_SESSION['msg_success']);
-            echo '</div>';
-        }
-        
-        // Mostrar mensagem de erro
-        if (isset($_SESSION['msg'])) {
-            echo '<div class="alert alert-danger" role="alert">';
-            echo $_SESSION['msg'];
-            unset($_SESSION['msg']);
-            echo '</div>';
-        } 
-        
-        // Mostrar mensagem informativa apenas se não houver outras mensagens
-        if (!isset($_SESSION['msg_success']) && !isset($_SESSION['msg'])) {
-            echo '<div class="alert alert-info" role="alert">';
-            echo 'Informe seu email e senha para entrar.';
-            echo '</div>';
-        }
-        ?>        
-        
+                session_start();
+                if (isset($_SESSION['msg'])) {
+                    echo '<div class="alert alert-danger" role="alert">';
+                    echo $_SESSION['msg'];
+                    unset($_SESSION['msg']);
+                    echo '</div>';
+                }else{
+                    echo '<div class="alert alert-info" role="alert">';
+                    echo 'Informe seu email e senha para entrar.';
+                    echo '</div>';
+                }
+            ?>        
         <div class="mb-3">
             <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" required>
+            <input type="email" name="email" class="form-control">
         </div>
-        
         <div class="mb-3">
             <label class="form-label">Senha</label>
-            <input type="password" name="senha" class="form-control" required>
+            <input type="password" name="senha" class="form-control">
         </div>
-        
-        <button type="submit" class="btn btn-primary w-100">Entrar</button>
+        <button type="submit" class="btn btn-primary">Entrar</button>
 
-        <div class="text-center mt-3">
-            <a href="index.php">Ainda não sou usuário</a>
+        <div class="text-end mt-2">
+            <a href="form-cadastra-usuario.html">Ainda não sou usuário</a>
         </div>
     </form>
 </body>
-</html> 
+
+</html>
