@@ -33,7 +33,7 @@ class UsuarioDAO{
         
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($stmt->rowCount()>0){
-            return $usuario['idusuario'];
+            return $usuario;
 
         }else{
             return false;
@@ -57,6 +57,24 @@ class UsuarioDAO{
         $stmt -> bindParam(1, $idusuario);
         $nome = '%'.$nome.'%';
         $stmt -> bindParam(2, $nome);
+        $stmt -> execute();
+
+        return $stmt -> fetchAll(PDO::FETCH_ASSOC);
+    }
+
+     public static function buscarUsuarioParaSeguir($idusuario, $nome){
+            $sql = "SELECT u. * FROM usuarios u WHERE u.idusuario !=? AND u.nome LIKE ?
+            AND idusuario NOT IN 
+            (SELECT s.idseguido FROM seguidos s WHERE s.idusuario=?);";
+
+
+
+        $conexao = ConexaoBD :: conectar();
+        $stmt = $conexao -> prepare($sql);
+        $stmt -> bindParam(1, $idusuario);
+        $nome = '%'.$nome.'%';
+        $stmt -> bindParam(2, $nome);
+        $stmt -> bindParam(3, $idusuario);
         $stmt -> execute();
 
         return $stmt -> fetchAll(PDO::FETCH_ASSOC);
