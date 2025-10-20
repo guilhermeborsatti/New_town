@@ -1,16 +1,28 @@
 <?php
-    session_start();
-    require_once "src/UsuarioDAO.php";
+session_start();
+require_once "src/UsuarioDAO.php";
 
-    if ($usuario = UsuarioDAO::validarUsuario($_POST)){    
-        $_SESSION['email'] = $_POST['email'];
-        $_SESSION['idusuario'] = $usuario ['idusuario'];
-           $_SESSION['nome'] = $usuario ['nome'];
-              $_SESSION['foto'] = $usuario ['foto'];
+if (!empty($_POST['email']) && !empty($_POST['senha'])) {
+    $dados = [
+        'email' => $_POST['email'],
+        'senha' => $_POST['senha']
+    ];
 
-        header("Location:home.php");
-    }else{
-        $_SESSION['msg'] = "Usuário ou senha inválido.";
-        header("Location:login.php");
+    $usuario = UsuarioDAO::validarUsuario($dados);
+
+    if ($usuario) {
+        // Salva todas as informações do usuário na sessão
+        $_SESSION['usuario'] = $usuario;
+        header("Location: home.php");
+        exit;
+    } else {
+        $_SESSION['msg'] = "Email ou senha incorretos!";
+        header("Location: login.php");
+        exit;
     }
+} else {
+    $_SESSION['msg'] = "Preencha todos os campos!";
+    header("Location: login.php");
+    exit;
+}
 ?>

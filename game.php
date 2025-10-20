@@ -1,33 +1,19 @@
 <?php
 session_start();
-if (!isset($_SESSION['email'])) {
+
+if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
-    exit();
+    exit;
 }
 
-require_once "src/ConexaoBD.php";
-require_once "src/UsuarioDAO.php";
-
-// Pegar dados do usuário logado
-try {
-    $conexao = ConexaoBD::conectar();
-    $email = $_SESSION['email'];
-    
-    $stmt = $conexao->prepare("SELECT * FROM usuarios WHERE email = :email");
-    $stmt->bindValue(':email', $email);
-    $stmt->execute();
-    
-    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-} catch (PDOException $e) {
-    $usuario = ['usuario' => 'Explorador', 'nivel' => 1, 'xp' => 0, 'x' => 8, 'y' => 8];
-}
+$usuario = $_SESSION['usuario'];
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <a class="navbar-brand" href="#">New-Town <?=$_SESSION['nome']?></a>      
     <title>Habbo Simples - <?php echo htmlspecialchars($usuario['usuario']); ?></title>
     <link rel="stylesheet" href="static/game-styles.css">
 </head>
@@ -36,9 +22,10 @@ try {
         <!-- Header com informações do usuário -->
         <div id="gameHeader">
             <div id="playerInfo">
-                <span>Jogador: <?php echo htmlspecialchars($usuario['usuario']); ?></span>
-                <span>Nível: <?php echo $usuario['nivel']; ?></span>
-                <span>XP: <?php echo $usuario['xp']; ?></span>
+               <span>Jogador: <?= htmlspecialchars($usuario['nome']) ?></span>
+<span>Nível: <?= htmlspecialchars($usuario['nivel']) ?></span>
+<span>XP: <?= htmlspecialchars($usuario['xp']) ?></span>
+
             </div>
             <div id="gameControls">
                 <button id="btnSave">Salvar Jogo</button>

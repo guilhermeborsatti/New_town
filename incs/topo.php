@@ -23,6 +23,7 @@
           <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
             <a class="nav-link" href="seguir-usuario.php">Usuários</a>
+                    <a class="nav-link" href="game.php">game</a>
         </ul>
       </div>
     </div>
