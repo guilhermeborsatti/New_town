@@ -12,7 +12,10 @@ if (!empty($_POST['email']) && !empty($_POST['senha'])) {
 
     if ($usuario) {
         // Salva todas as informações do usuário na sessão
-        $_SESSION['usuario'] = $usuario;
+        $_SESSION['email'] = $usuario['email'];
+        $_SESSION['nome'] = $usuario['nome'];
+        $_SESSION['idusuario'] = $usuario['idusuario'];
+        $_SESSION['foto'] = $usuario['foto'];
         header("Location: home.php");
         exit;
     } else {
