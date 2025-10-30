@@ -24,7 +24,7 @@
            <li class="nav-item"><a class="nav-link" href="nova-postagem.php">Postar</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
             <a class="nav-link" href="seguir-usuario.php">Usuários</a>
-                    <a class="nav-link" href="game.php">game</a>
+                    <a class="nav-link" href="menu.php">Game-Menu</a>
         </ul>
       </div>
     </div>

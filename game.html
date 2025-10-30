@@ -1,21 +1,13 @@
-<?php
-// Garante que a sessão inicie
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jogo Plataforma 2D</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
 
-include "incs/topo.php";
-require_once "src/PostagemDAO.php";
-
-$idusuario = $_SESSION['idusuario'] ?? null;
-
-// Caso queira listar postagens no futuro
-if ($idusuario) {
-    $postagens = PostagemDAO::listarTimeline(idusuario: $idusuario);
-}
-?>
-
-<body>
+  <body>
     <!-- 🎮 Canvas do jogo -->
     <canvas id="gameCanvas"></canvas>
 
@@ -23,8 +15,10 @@ if ($idusuario) {
     <button id="openProfile">👤 Ver Meu Perfil</button>
 
     <!-- 🔗 Script do jogo -->
-    <script src="js/script.js"></script>
-      <script>
+    <script src="script.js"></script>
+
+
+    <script>
       if ("WebSocket" in window) {
         (function () {
           function refreshCSS() {
@@ -72,5 +66,5 @@ if ($idusuario) {
         );
       }
     </script>
-</body>
+  </body>
 </html>
