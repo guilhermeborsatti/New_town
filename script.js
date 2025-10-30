@@ -1,4 +1,3 @@
-
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -147,64 +146,211 @@ function loop() {
   requestAnimationFrame(loop);
 }
 
-loop();
+// =============================================
+// 🎭 MODAL DE PERFIL - ADICIONE A PARTIR DAQUI
+// =============================================
 
-// 🎭 Modal de Perfil (sem seguir)
-const openBtn = document.getElementById("openProfile");
-const overlay = document.createElement("div");
-const modal = document.createElement("div");
+const modal = document.getElementById('profileModal');
+const openProfileBtn = document.getElementById('openProfile');
+const profileName = document.getElementById('profileName');
+const profileAvatar = document.getElementById('profileAvatar');
+const followersCount = document.getElementById('followersCount');
+const followingCount = document.getElementById('followingCount');
+const postsCount = document.getElementById('postsCount');
+const followBtn = document.getElementById('followBtn');
+const editProfileBtn = document.getElementById('editProfileBtn');
 
-overlay.style.position = "fixed";
-overlay.style.top = "0";
-overlay.style.left = "0";
-overlay.style.width = "100%";
-overlay.style.height = "100%";
-overlay.style.backgroundColor = "rgba(0,0,0,0.6)";
-overlay.style.display = "none";
-overlay.style.justifyContent = "center";
-overlay.style.alignItems = "center";
-overlay.style.zIndex = "50";
+let currentPlayerId = null;
+let isFollowing = false;
 
-modal.style.background = "rgba(0,0,0,0.85)";
-modal.style.color = "white";
-modal.style.padding = "20px";
-modal.style.borderRadius = "20px";
-modal.style.textAlign = "center";
-modal.style.width = "340px";
-modal.style.boxShadow = "0 0 20px rgba(0,0,0,0.4)";
-modal.innerHTML = `
-  <h2 style="margin-bottom:10px;">Meu Perfil</h2>
-  <img src="https://i.ibb.co/42dKxkZ/avatar-pixel.png" 
-       alt="Avatar" 
-       style="width:100px;height:100px;border-radius:10px;border:2px solid #fff;margin-bottom:10px;">
-  <p><strong>Nickname:</strong> Player.GDP</p>
-  <p><strong>Nome:</strong> Guilherme Padilha</p>
-  <p><strong>Email:</strong> guipadilha@gmail.com</p>
-  <div style="display:flex;justify-content:space-around;margin-top:20px;">
-    <p>Seguindo <strong>3</strong></p>
-    <p>Seguidores <strong>2</strong></p>
-  </div>
-  <button id="closeModal" style="
-    background:#e74c3c;
-    color:white;
-    border:none;
-    border-radius:8px;
-    padding:8px 14px;
-    margin-top:10px;
-    cursor:pointer;">Fechar</button>
-`;
+// Função para verificar se o clique foi no personagem
+function isClickOnPlayer(clickX, clickY) {
+  return (
+    clickX >= player.x &&
+    clickX <= player.x + player.width &&
+    clickY >= player.y - player.height &&
+    clickY <= player.y
+  );
+}
 
-overlay.appendChild(modal);
-document.body.appendChild(overlay);
+// Detectar clique no canvas
+canvas.addEventListener('click', function(event) {
+  const rect = canvas.getBoundingClientRect();
+  const clickX = event.clientX - rect.left;
+  const clickY = event.clientY - rect.top;
 
-// abrir modal
-openBtn.addEventListener("click", () => {
-  overlay.style.display = "flex";
-});
-
-// fechar modal
-overlay.addEventListener("click", (e) => {
-  if (e.target === overlay || e.target.id === "closeModal") {
-    overlay.style.display = "none";
+  if (isClickOnPlayer(clickX, clickY)) {
+    toggleModal();
   }
 });
+
+// Abrir/fechar modal
+openProfileBtn.addEventListener('click', toggleModal);
+
+// Fechar modal clicando fora
+document.addEventListener('click', function(event) {
+  if (!modal.contains(event.target) && !openProfileBtn.contains(event.target)) {
+    modal.classList.remove('active');
+  }
+});
+
+function toggleModal() {
+  if (modal.classList.contains('active')) {
+    modal.classList.remove('active');
+  } else {
+    loadPlayerProfile();
+    modal.classList.add('active');
+  }
+}
+
+// Carregar dados do perfil do jogador
+async function loadPlayerProfile() {
+  try {
+    const userId = getLoggedUserId();
+    
+    const response = await fetch(`get-player-profile.php?id=${userId}`);
+    const profileData = await response.json();
+    
+    if (profileData.success) {
+      updateProfileUI(profileData.data);
+    } else {
+      console.error('Erro ao carregar perfil:', profileData.error);
+    }
+  } catch (error) {
+    console.error('Erro:', error);
+    // Fallback para dados locais
+    updateProfileUI({
+      nome: player.name,
+      seguidores: 0,
+      seguindo: 0,
+      posts: 0,
+      foto: null,
+      isFollowing: false
+    });
+  }
+}
+
+// Atualizar interface do perfil
+function updateProfileUI(profile) {
+  profileName.textContent = profile.nome || player.name;
+  followersCount.textContent = profile.seguidores || 0;
+  followingCount.textContent = profile.seguindo || 0;
+  postsCount.textContent = profile.posts || 0;
+  
+  // Atualizar avatar
+  if (profile.foto) {
+    profileAvatar.innerHTML = `<img src="uploads/${profile.foto}" alt="${profile.nome}">`;
+  } else {
+    profileAvatar.innerHTML = '👤';
+  }
+  
+  // Atualizar botão de seguir
+  isFollowing = profile.isFollowing || false;
+  updateFollowButton();
+}
+
+// Atualizar botão de seguir
+function updateFollowButton() {
+  if (isFollowing) {
+    followBtn.textContent = 'Seguindo';
+    followBtn.classList.remove('btn-follow');
+    followBtn.classList.add('btn-following');
+  } else {
+    followBtn.textContent = 'Seguir';
+    followBtn.classList.remove('btn-following');
+    followBtn.classList.add('btn-follow');
+  }
+}
+
+// Ação de seguir/parar de seguir
+followBtn.addEventListener('click', async function() {
+  try {
+    const userId = getLoggedUserId();
+    const targetUserId = currentPlayerId || userId;
+    
+    const response = await fetch('segui-ajax.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: isFollowing ? 'unfollow' : 'follow',
+        targetUserId: targetUserId
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      isFollowing = !isFollowing;
+      updateFollowButton();
+      
+      // Atualizar contador de seguidores
+      if (isFollowing) {
+        followersCount.textContent = parseInt(followersCount.textContent) + 1;
+      } else {
+        followersCount.textContent = parseInt(followersCount.textContent) - 1;
+      }
+    }
+  } catch (error) {
+    console.error('Erro ao seguir:', error);
+  }
+});
+
+// Botão editar perfil
+editProfileBtn.addEventListener('click', function() {
+  window.location.href = 'editar-perfil.php';
+});
+
+// Função para obter ID do usuário logado (você precisa implementar)
+function getLoggedUserId() {
+  // Tenta pegar do campo hidden que você vai adicionar no HTML
+  const userIdElement = document.getElementById('userId');
+  if (userIdElement && userIdElement.value) {
+    return parseInt(userIdElement.value);
+  }
+  
+  // Se não encontrar, usa um fallback
+  console.warn('ID do usuário não encontrado no HTML, verifique se adicionou o campo hidden');
+  
+  // Fallback - você pode ajustar conforme necessário
+  // Se estiver em ambiente de desenvolvimento, pode retornar um ID fixo
+  // Ou buscar de outra forma (localStorage, cookie, etc.)
+  return 1; // Apenas para teste - ajuste conforme sua necessidade
+}
+// No loadPlayerProfile(), adicione um console.log para ver o que está vindo:
+async function loadPlayerProfile() {
+  try {
+    const userId = getLoggedUserId();
+    
+    console.log("🔄 Carregando perfil do usuário ID:", userId); // DEBUG
+    
+    const response = await fetch(`get-player-profile.php?id=${userId}`);
+    const profileData = await response.json();
+    
+    console.log("📊 Dados recebidos:", profileData); // DEBUG
+    
+    if (profileData.success) {
+      updateProfileUI(profileData.data);
+    } else {
+      console.error('Erro ao carregar perfil:', profileData.error);
+    }
+  } catch (error) {
+    console.error('Erro:', error);
+    // Fallback para dados locais
+    updateProfileUI({
+      nome: player.name,
+      seguidores: 0,
+      seguindo: 0,
+      posts: 0,
+      foto: null,
+      isFollowing: false
+    });
+  }
+}
+// =============================================
+// FIM DO MODAL - O LOOP DO JOGO VEM DEPOIS
+// =============================================
+
+// INICIA O JOGO - isso deve ficar NO FINAL
+loop();

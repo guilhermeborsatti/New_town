@@ -1,7 +1,7 @@
 <?php
 
 include "incs/topo.php";
-
+include "incs/valida-sessao.php";
 
 require_once "src/PostagemDAO.php";
 

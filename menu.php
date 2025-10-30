@@ -10,7 +10,7 @@
   <body>
     <div class="menu">
       <h1>NEW TOWN</h1>
-      <a href="game.html">
+      <a href="game.php">
         <button>Jogar</button>
       </a>
       <button>Opções</button>

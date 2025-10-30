@@ -79,5 +79,31 @@ class UsuarioDAO{
 
         return $stmt -> fetchAll(PDO::FETCH_ASSOC);
     }
+    // Adicione este método no seu UsuarioDAO.php
+public static function atualizarUsuario($dados) {
+    $conexao = ConexaoBD::conectar();
+    
+    if (isset($dados['senha'])) {
+        // Se tem senha, atualiza com senha
+        $senhaCriptografada = md5($dados['senha']);
+        $sql = "UPDATE usuarios SET nome = ?, email = ?, senha = ?, foto = ? WHERE idusuario = ?";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(1, $dados['nome']);
+        $stmt->bindParam(2, $dados['email']);
+        $stmt->bindParam(3, $senhaCriptografada);
+        $stmt->bindParam(4, $dados['foto']);
+        $stmt->bindParam(5, $dados['idusuario']);
+    } else {
+        // Se não tem senha, atualiza sem senha
+        $sql = "UPDATE usuarios SET nome = ?, email = ?, foto = ? WHERE idusuario = ?";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(1, $dados['nome']);
+        $stmt->bindParam(2, $dados['email']);
+        $stmt->bindParam(3, $dados['foto']);
+        $stmt->bindParam(4, $dados['idusuario']);
+    }
+    
+    return $stmt->execute();
+}
 }
 ?>
