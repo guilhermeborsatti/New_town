@@ -1,5 +1,4 @@
 <?php
-// Remove session_start() daqui - já está no valida-sessao.php
 include("incs/valida-sessao.php");
 ?>
 <!DOCTYPE html>
@@ -17,11 +16,10 @@ include("incs/valida-sessao.php");
         left: 0;
         width: 100%;
         height: 100%;
-        background: #87CEEB; /* Azul céu para ver se aparece */
-        display: block; /* IMPORTANTE */
+        display: block;
       }
 
-      /* Modal (mantenha igual) */
+      /* Modal */
       .profile-modal {
         display: none;
         position: fixed;
@@ -40,7 +38,97 @@ include("incs/valida-sessao.php");
         display: block;
       }
 
-      /* ... (mantenha o resto do CSS do modal igual) ... */
+      .profile-header {
+        background: #34495e;
+        padding: 15px;
+        border-radius: 10px 10px 0 0;
+        text-align: center;
+      }
+
+      .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+        background: #ecf0f1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        color: #2c3e50;
+        overflow: hidden;
+      }
+
+      .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .profile-info {
+        padding: 15px;
+      }
+
+      .profile-stats {
+        display: flex;
+        justify-content: space-around;
+        margin: 15px 0;
+        text-align: center;
+      }
+
+      .stat {
+        flex: 1;
+      }
+
+      .stat-number {
+        font-size: 18px;
+        font-weight: bold;
+        color: #3498db;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: #bdc3c7;
+      }
+
+      .profile-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s;
+      }
+
+      .btn-follow {
+        background: #3498db;
+        color: white;
+      }
+
+      .btn-follow:hover {
+        background: #2980b9;
+      }
+
+      .btn-following {
+        background: #27ae60;
+        color: white;
+      }
+
+      .btn-edit {
+        background: #e74c3c;
+        color: white;
+      }
+
+      .btn-edit:hover {
+        background: #c0392b;
+      }
 
       #openProfile {
         position: fixed;
@@ -53,6 +141,10 @@ include("incs/valida-sessao.php");
         border: none;
         border-radius: 5px;
         cursor: pointer;
+      }
+
+      #openProfile:hover {
+        background-color: #2980b9;
       }
 
       body {
@@ -76,7 +168,7 @@ include("incs/valida-sessao.php");
         <div class="profile-avatar" id="profileAvatar">
           👤
         </div>
-        <h3 id="profileName"><?php echo $_SESSION['nome'] ?? 'Player_GDP'; ?></h3>
+        <h3 id="profileName">Carregando...</h3>
       </div>
       
       <div class="profile-info">
@@ -107,82 +199,10 @@ include("incs/valida-sessao.php");
     <input type="hidden" id="userName" value="<?php echo $_SESSION['nome'] ?? ''; ?>">
     <input type="hidden" id="userPhoto" value="<?php echo $_SESSION['foto'] ?? ''; ?>">
 
-    <!-- 🔗 TESTE SIMPLES - remova o script.js complexo por enquanto -->
-    <script>
-      console.log("🎯 Iniciando teste do jogo...");
-      
-      const canvas = document.getElementById("gameCanvas");
-      const ctx = canvas.getContext("2d");
-      
-      // Redimensiona o canvas
-      function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        console.log("📏 Canvas:", canvas.width, "x", canvas.height);
-      }
-      
-      // Desenha o jogo básico
-      function draw() {
-        // Fundo
-        ctx.fillStyle = "#87CEEB";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // Chão
-        ctx.fillStyle = "#8B4513";
-        ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
-        
-        // Personagem
-        ctx.fillStyle = "red";
-        ctx.fillRect(100, canvas.height - 200, 50, 100);
-        
-        // Nome do jogador
-        ctx.fillStyle = "black";
-        ctx.font = "20px Arial";
-        ctx.fillText("<?php echo $_SESSION['nome'] ?? 'Player_GDP'; ?>", 80, canvas.height - 220);
-        
-        // Mensagem
-        ctx.fillStyle = "white";
-        ctx.font = "16px Arial";
-        ctx.fillText("Clique no personagem vermelho para abrir o perfil!", 50, 50);
-      }
-      
-      // Inicializa
-      resizeCanvas();
-      draw();
-      window.addEventListener("resize", resizeCanvas);
-      
-      // Sistema simples do modal
-      const modal = document.getElementById('profileModal');
-      const openProfileBtn = document.getElementById('openProfile');
-      
-      openProfileBtn.addEventListener('click', function() {
-        modal.classList.toggle('active');
-      });
-      
-      // Fechar modal clicando fora
-      document.addEventListener('click', function(event) {
-        if (!modal.contains(event.target) && !openProfileBtn.contains(event.target)) {
-          modal.classList.remove('active');
-        }
-      });
-      
-      // Clique no personagem (área vermelha)
-      canvas.addEventListener('click', function(event) {
-        const rect = canvas.getBoundingClientRect();
-        const clickX = event.clientX - rect.left;
-        const clickY = event.clientY - rect.top;
-        
-        // Verifica se clicou no personagem (área vermelha)
-        if (clickX >= 100 && clickX <= 150 && clickY >= canvas.height - 200 && clickY <= canvas.height - 100) {
-          modal.classList.add('active');
-          console.log("🎭 Modal aberto pelo clique no personagem!");
-        }
-      });
-      
-      console.log("✅ Jogo carregado! Clique no quadrado vermelho.");
-    </script>
+    <!-- 🔗 Script do jogo REAL -->
+    <script src="script.js"></script>
 
-    <!-- Código Live Server (opcional) -->
+    <!-- Código Live Server -->
     <script>
       // Live Server code...
     </script>
