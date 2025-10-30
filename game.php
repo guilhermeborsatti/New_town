@@ -1,88 +1,79 @@
-<?php
-session_start();
+ <?php
+
 include "incs/topo.php";
 
-// Verifica se o usuário está logado
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.php");
-    exit;
-}
 
-$usuario = $_SESSION['usuario'];
+require_once "src/PostagemDAO.php";
+
+
+session_start();
+$idusuario = $_SESSION['idusuario']; 
+
+// Busca as postagens da timeline do usuário
+$postagens = PostagemDAO::listarTimeline($idusuario);
+
+
 ?>
+ 
+ 
+ 
+ <body>
+    <!-- 🎮 Canvas do jogo -->
+    <canvas id="gameCanvas"></canvas>
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New-Town - <?= htmlspecialchars($usuario['nome']) ?></title>
+    <!-- 👤 Botão para abrir o perfil -->
+    <button id="openProfile">👤 Ver Meu Perfil</button>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="static/game-styles.css">
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">New-Town <?= htmlspecialchars($usuario['nome']) ?></a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="home.php">Início</a></li>
-                    <li class="nav-item"><a class="nav-link" href="seguir-usuario.php">Usuários</a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php">Sair</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- 🔗 Script do jogo -->
+    <script src="script.js"></script>
 
-    <!-- Container do jogo -->
-    <div id="gameContainer" class="p-3">
-        <!-- Cabeçalho do jogo -->
-        <div id="gameHeader" class="d-flex justify-content-between align-items-center bg-secondary text-white p-2 rounded">
-            <div id="playerInfo">
-                <span><strong>Jogador:</strong> <?= htmlspecialchars($usuario['nome']) ?></span> |
-                <span><strong>Nível:</strong> <?= htmlspecialchars($usuario['nivel'] ?? 1) ?></span> |
-                <span><strong>XP:</strong> <?= htmlspecialchars($usuario['xp'] ?? 0) ?></span>
-            </div>
-            <div id="gameControls">
-                <button id="btnSave" class="btn btn-success btn-sm">💾 Salvar Jogo</button>
-                <a href="home.php" class="btn btn-light btn-sm">🏠 Início</a>
-                <a href="logout.php" class="btn btn-danger btn-sm">🚪 Sair</a>
-            </div>
-        </div>
 
-        <!-- Área do jogo -->
-        <div id="gameArea" class="d-flex mt-3">
-            <canvas id="gameCanvas" width="800" height="600" class="border rounded shadow"></canvas>
-            <div id="miniMapContainer" class="ms-3">
-                <h5 class="text-white">Mini Mapa</h5>
-                <canvas id="miniMap" width="150" height="150" class="border rounded"></canvas>
-            </div>
-        </div>
-
-        <!-- Status do jogo -->
-        <div id="gameStatus" class="text-white mt-3">
-            <div id="coordinates">Posição: X: <span id="posX"><?= $usuario['x'] ?? 8 ?></span>, Y: <span id="posY"><?= $usuario['y'] ?? 8 ?></span></div>
-            <div id="fpsCounter">FPS: 60</div>
-            <div id="controlsHelp" class="text-secondary">
-                Controles: WASD para mover | Shift para correr
-            </div>
-        </div>
-    </div>
-
-    <!-- Dados do usuário disponíveis no JavaScript -->
     <script>
-        const userData = {
-            id: <?= (int)$usuario['idusuario'] ?>,
-            nome: "<?= addslashes($usuario['nome']) ?>",
-            nivel: <?= (int)($usuario['nivel'] ?? 1) ?>,
-            xp: <?= (int)($usuario['xp'] ?? 0) ?>,
-            x: <?= (int)($usuario['x'] ?? 8) ?>,
-            y: <?= (int)($usuario['y'] ?? 8) ?>
-        };
+      if ("WebSocket" in window) {
+        (function () {
+          function refreshCSS() {
+            var sheets = [].slice.call(document.getElementsByTagName("link"));
+            var head = document.getElementsByTagName("head")[0];
+            for (var i = 0; i < sheets.length; ++i) {
+              var elem = sheets[i];
+              var parent = elem.parentElement || head;
+              parent.removeChild(elem);
+              var rel = elem.rel;
+              if (
+                elem.href &&
+                typeof rel != "string" ||
+                rel.length == 0 ||
+                rel.toLowerCase() == "stylesheet"
+              ) {
+                var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, "");
+                elem.href =
+                  url +
+                  (url.indexOf("?") >= 0 ? "&" : "?") +
+                  "_cacheOverride=" +
+                  new Date().valueOf();
+              }
+              parent.appendChild(elem);
+            }
+          }
+          var protocol = window.location.protocol === "http:" ? "ws://" : "wss://";
+          var address = protocol + window.location.host + window.location.pathname + "/ws";
+          var socket = new WebSocket(address);
+          socket.onmessage = function (msg) {
+            if (msg.data == "reload") window.location.reload();
+            else if (msg.data == "refreshcss") refreshCSS();
+          };
+          if (
+            sessionStorage &&
+            !sessionStorage.getItem("IsThisFirstTime_Log_From_LiveServer")
+          ) {
+            console.log("Live reload enabled.");
+            sessionStorage.setItem("IsThisFirstTime_Log_From_LiveServer", true);
+          }
+        })();
+      } else {
+        console.error(
+          "Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading."
+        );
+      }
     </script>
-
-    <script src="js/game.js"></script>
-</body>
-</html>
+  </body>
