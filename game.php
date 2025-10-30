@@ -1,23 +1,21 @@
- <?php
+<?php
+// Garante que a sessão inicie
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 include "incs/topo.php";
-
-
 require_once "src/PostagemDAO.php";
 
+$idusuario = $_SESSION['idusuario'] ?? null;
 
-session_start();
-$idusuario = $_SESSION['idusuario']; 
-
-// Busca as postagens da timeline do usuário
-$postagens = PostagemDAO::listarTimeline($idusuario);
-
-
+// Caso queira listar postagens no futuro
+if ($idusuario) {
+    $postagens = PostagemDAO::listarTimeline(idusuario: $idusuario);
+}
 ?>
- 
- 
- 
- <body>
+
+<body>
     <!-- 🎮 Canvas do jogo -->
     <canvas id="gameCanvas"></canvas>
 
@@ -25,10 +23,8 @@ $postagens = PostagemDAO::listarTimeline($idusuario);
     <button id="openProfile">👤 Ver Meu Perfil</button>
 
     <!-- 🔗 Script do jogo -->
-    <script src="script.js"></script>
-
-
-    <script>
+    <script src="js/script.js"></script>
+      <script>
       if ("WebSocket" in window) {
         (function () {
           function refreshCSS() {
@@ -76,4 +72,5 @@ $postagens = PostagemDAO::listarTimeline($idusuario);
         );
       }
     </script>
-  </body>
+</body>
+</html>
