@@ -199,6 +199,17 @@ include("incs/valida-sessao.php");
     <input type="hidden" id="userName" value="<?php echo $_SESSION['nome'] ?? ''; ?>">
     <input type="hidden" id="userPhoto" value="<?php echo $_SESSION['foto'] ?? ''; ?>">
 
+    <!-- 🔥 ADICIONE ESTE SCRIPT PARA PASSAR OS DADOS DO PHP PARA JAVASCRIPT -->
+    <script>
+      // Passa os dados da sessão PHP para o JavaScript
+      const usuarioLogado = {
+        id: <?php echo $_SESSION['idusuario'] ?? 0; ?>,
+        nome: "<?php echo addslashes($_SESSION['nome'] ?? 'Jogador'); ?>",
+        foto: "<?php echo addslashes($_SESSION['foto'] ?? ''); ?>"
+      };
+      console.log("👤 Dados do usuário carregados:", usuarioLogado);
+    </script>
+
     <!-- 🔗 Script do jogo REAL -->
     <script src="script.js"></script>
 

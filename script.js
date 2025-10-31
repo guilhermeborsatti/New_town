@@ -34,6 +34,7 @@ playerSprites.forEach((sprite, index) => {
 let gravity = 0.8;
 let groundY = 0;
 
+// 🔥 PLAYER AGORA USA O NOME DO USUÁRIO LOGADO
 const player = {
   x: 100,
   y: 0,
@@ -41,7 +42,7 @@ const player = {
   onGround: false,
   width: 174,
   height: 174,
-  name: "Player_GDP",
+  name: usuarioLogado.nome || "Player_GDP", // Nome da sessão do PHP
   // Controle de Animação
   currentFrame: 0,
   frameTimer: 0,
@@ -288,15 +289,14 @@ async function loadPlayerProfile() {
 // Fallback caso o servidor não responda
 function useFallbackProfile() {
   console.log("🔄 Usando dados fallback");
-  const userName = document.getElementById('userName')?.value || player.name;
-  const userPhoto = document.getElementById('userPhoto')?.value || null;
   
+  // 🔥 USA OS DADOS DO USUÁRIO LOGADO COMO FALLBACK
   updateProfileUI({
-    nome: userName,
+    nome: usuarioLogado.nome || player.name,
     seguidores: 0,
     seguindo: 0,
     posts: 0,
-    foto: userPhoto,
+    foto: usuarioLogado.foto || null,
     isFollowing: false
   });
 }
@@ -391,10 +391,17 @@ editProfileBtn.addEventListener('click', function() {
 
 // Função para obter ID do usuário logado
 function getLoggedUserId() {
+  // 🔥 USA O ID DO USUÁRIO LOGADO
+  if (usuarioLogado && usuarioLogado.id) {
+    console.log("🔑 ID do usuário encontrado:", usuarioLogado.id);
+    return usuarioLogado.id;
+  }
+  
+  // Fallback para os campos hidden (mantido para compatibilidade)
   const userIdElement = document.getElementById('userId');
   if (userIdElement && userIdElement.value) {
     const id = parseInt(userIdElement.value);
-    console.log("🔑 ID do usuário encontrado:", id);
+    console.log("🔑 ID do usuário encontrado (fallback):", id);
     return id;
   }
   
@@ -417,6 +424,7 @@ function getLoggedUserId() {
 // Aguarda um pouco para garantir que tudo carregou
 window.addEventListener('load', function() {
   console.log("🎮 Iniciando jogo...");
+  console.log("👤 Nome do personagem:", player.name);
   console.log("🎯 Dicas:");
   console.log("   - Use WASD ou setas para mover");
   console.log("   - Clique no personagem para abrir o perfil");
