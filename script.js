@@ -23,7 +23,7 @@ background.onerror = () => console.error("❌ Erro ao carregar fundo");
 // 👨 Personagem - Sprites de Animação
 const playerSprites = [new Image(), new Image()];
 playerSprites[0].src = "sprites/parado1.png";
-playerSprites[1].src = "sprites/parado2.png";
+playerSprites[1].src = "sprites/parado2.gif";
 
 // Verificar carregamento dos sprites
 playerSprites.forEach((sprite, index) => {
