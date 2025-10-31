@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Pixelify Sans', sans-serif;
+}
+
+body {
+  background-image: url('cidade.png'); 
+    
+ 
+    
+   background-size: auto; 
+    
+    background-position: center 115%; /* Ou 'center 90%' para subir um pouco */
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    background-attachment: fixed;
+}
+
+
+
+ main {
+    display: flex;
+ }
+
+ aside {
+    width: 100%;
+    max-width: 270px;
+    background-color: #0581F3;
+    padding: 30px 30px 30px;
+ }

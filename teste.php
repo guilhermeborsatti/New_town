@@ -8,7 +8,6 @@ include "incs/topo.php";
 ?>
 
 <body>
-
 <main>
     <aside>
         <span class="option-title">Tamanho:</span>
@@ -18,8 +17,13 @@ include "incs/topo.php";
         <input type="color" class="input-color">
 
         <span class="option-title">Cores usadas:</span>
-        <section></section>
+        <section class="used-colors"></section>
+
+        <button class="button-save">Baixar imagem</button>
     </aside>
+
+    <section class="canvas"></section>
+    <div class="resize"></div>
 </main>
 
 <script src="js/teste.js"></script>
