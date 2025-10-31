@@ -2,16 +2,12 @@
 
 include "incs/topo.php";
 
-
-
-
 ?>
 
-<body>
 <main>
     <aside>
         <span class="option-title">Tamanho:</span>
-        <input type="number" class="input-size" min="4"value="10"> 
+        <input type="number" class="input-size" min="4" value="10"> 
 
         <span class="option-title">Cor:</span>
         <input type="color" class="input-color">
@@ -26,5 +22,8 @@ include "incs/topo.php";
     <div class="resize"></div>
 </main>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <script src="js/teste.js"></script>
-</body>
+
+</body> 
+</html>

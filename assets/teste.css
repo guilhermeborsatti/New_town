@@ -1,34 +1,92 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
 
-*{
+/* Reset básico */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Pixelify Sans', sans-serif;
 }
 
+/* Fundo da Tela */
 body {
-  background-image: url('cidade.png'); 
+    /* Mude para 'img/cidade.png' se o seu CSS não estiver na mesma pasta da imagem */
+    background-image: url('img/cidade.png'); 
     
- 
-    
-   background-size: auto; 
-    
-    background-position: center 115%; /* Ou 'center 90%' para subir um pouco */
+    background-size: cover;
+    background-position: center 90%; /* Ajustado para mostrar mais da rua, mas manter os prédios */
     background-repeat: no-repeat;
     min-height: 100vh;
     background-attachment: fixed;
+    background-color: #212121; /* Cor de fallback, mas deve ser transparente se a imagem carregar */
 }
 
-
-
- main {
+/* Layout Principal */
+main {
     display: flex;
- }
+    gap: 20px;
+    align-items: flex-start;
+    /* Adicione padding-top ou margin-top para descer o conteúdo da Navbar, se necessário */
+    padding-top: 20px; 
+}
 
- aside {
+/* Barra Lateral (Configurações) */
+aside {
     width: 100%;
     max-width: 270px;
-    background-color: #0581F3;
-    padding: 30px 30px 30px;
- }
+    background-color: rgba(44, 44, 44, 0.9); /* Fundo escuro semi-transparente para ver o fundo da cidade */
+    padding: 30px 20px 20px;
+    min-height: calc(100vh - 55px);
+    
+    /* Corrige o layout da barra lateral */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+}
+
+/* Grade de Pixels */
+.canvas {
+    width: 100%;
+    max-width: 720px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px; /* Espaço entre as linhas */
+    background-color: transparent; /* Garante que não haja fundo cobrindo o grid */
+}
+
+.row {
+    display: flex;
+    gap: 2px; /* Espaço entre os pixels */
+}
+
+.pixel {
+ 
+    flex: 1; 
+    
+    aspect-ratio: 1; /* Garante que o pixel é um quadrado (1:1) */
+    background-color: #444; 
+    user-select: none;
+    border: 1px solid #212121;
+}
+
+/* Estilos dos Componentes de Opção */
+.option-title {
+    color: #ebebeb;
+    font-size: 1rem;
+    font-weight: 600;
+    display: block; 
+}
+
+.input-size {
+    width: 100%;
+    margin: 10px 0 20px;
+}
+
+.saving-mode .pixel {
+    /* Remove a borda branca que simula a grade */
+    border: none !important; 
+    
+    /* Faz os pixels não pintados ficarem transparentes ou brancos (se você quiser um fundo branco) */
+    background-color: transparent !important; 
+}
