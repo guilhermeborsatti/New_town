@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
 
-/* Reset básico */
+
 * {
     margin: 0;
     padding: 0;
@@ -28,10 +28,10 @@ main {
     gap: 20px;
     align-items: flex-start;
     padding-top: 20px; 
-    padding-left: 20px; /* Adiciona algum padding na esquerda */
+    padding-left: 20px;
 }
 
-/* Barra Lateral (Configurações) */
+
 aside {
     width: 100%;
     max-width: 270px;
@@ -39,13 +39,12 @@ aside {
     padding: 30px 20px 20px;
     min-height: calc(100vh - 55px);
     
-    /* Corrige o layout da barra lateral */
+
     display: flex;
     flex-direction: column;
     gap: 10px; 
 }
 
-/* Grade de Pixels Container */
 .canvas {
     width: 100%;
     max-width: 720px;
@@ -53,7 +52,7 @@ aside {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    /* Fundo do canvas deve ser transparente para vermos a cor dos pixels */
+   
     background-color: transparent; 
 }
 
@@ -62,21 +61,21 @@ aside {
     gap: 2px;
 }
 
-/* O PIXEL INDIVIDUAL */
+
 .pixel {
-    flex: 1; /* ✅ CORREÇÃO: Faz o pixel se redimensionar dentro do flexbox */
+    flex: 1; 
     aspect-ratio: 1; 
     
-    /* ➡️ CORREÇÃO: Mude a cor padrão para branco para salvamento limpo */
+
     background-color: #FFFFFF; 
     
     user-select: none;
-    /* ➡️ Borda escura para a grade se destacar no fundo escuro do app */
+
     border: 1px solid #777; 
     cursor: crosshair;
 }
 
-/* Estilos dos Componentes de Opção (ajustados para cor escura) */
+
 .option-title {
     color: #ebebeb;
     font-size: 1rem;
@@ -125,7 +124,7 @@ aside {
     font-weight: 600;
     font-size: 0.85rem;
     margin-top: 30px;
-    background-color: #0581F3; /* Cor de destaque */
+    background-color: #0581F3; 
     color: white;
     cursor: pointer;
     transition: background-color 0.2s;
@@ -135,16 +134,16 @@ aside {
 }
 
 
-/* REGRAS DE SALVAMENTO (Para o html2canvas) */
+
 .saving-mode .pixel {
-    /* ➡️ ESSENCIAL: Remove a borda para não salvar a grade */
+   
     border: none !important; 
 }
 .saving-mode .canvas, .saving-mode .row {
-    /* Remove o gap entre os pixels para evitar linhas brancas finas */
+  
     gap: 0px !important;
 }
 .saving-mode .canvas {
-    /* Garante que o canvas não tenha margem superior ao salvar */
+ 
     margin-top: 0 !important;
 }
