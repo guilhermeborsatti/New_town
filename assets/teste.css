@@ -14,11 +14,12 @@ body {
     background-image: url('img/cidade.png'); 
     
     background-size: cover;
-    background-position: center 90%; /* Ajustado para mostrar mais da rua, mas manter os prédios */
+    background-position: center 90%; /* Ajustado para mostrar mais da rua */
     background-repeat: no-repeat;
     min-height: 100vh;
     background-attachment: fixed;
-    background-color: #212121; /* Cor de fallback, mas deve ser transparente se a imagem carregar */
+    background-color: #212121; /* Cor de fallback, fundo escuro para o resto do app */
+    color: #ebebeb; /* Cor do texto em geral */
 }
 
 /* Layout Principal */
@@ -26,15 +27,15 @@ main {
     display: flex;
     gap: 20px;
     align-items: flex-start;
-    /* Adicione padding-top ou margin-top para descer o conteúdo da Navbar, se necessário */
     padding-top: 20px; 
+    padding-left: 20px; /* Adiciona algum padding na esquerda */
 }
 
 /* Barra Lateral (Configurações) */
 aside {
     width: 100%;
     max-width: 270px;
-    background-color: rgba(44, 44, 44, 0.9); /* Fundo escuro semi-transparente para ver o fundo da cidade */
+    background-color: rgba(44, 44, 44, 0.9); 
     padding: 30px 20px 20px;
     min-height: calc(100vh - 55px);
     
@@ -44,33 +45,38 @@ aside {
     gap: 10px; 
 }
 
-/* Grade de Pixels */
+/* Grade de Pixels Container */
 .canvas {
     width: 100%;
     max-width: 720px;
     margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 2px; /* Espaço entre as linhas */
-    background-color: transparent; /* Garante que não haja fundo cobrindo o grid */
+    gap: 2px;
+    /* Fundo do canvas deve ser transparente para vermos a cor dos pixels */
+    background-color: transparent; 
 }
 
 .row {
     display: flex;
-    gap: 2px; /* Espaço entre os pixels */
+    gap: 2px;
 }
 
+/* O PIXEL INDIVIDUAL */
 .pixel {
- 
-    flex: 1; 
+    flex: 1; /* ✅ CORREÇÃO: Faz o pixel se redimensionar dentro do flexbox */
+    aspect-ratio: 1; 
     
-    aspect-ratio: 1; /* Garante que o pixel é um quadrado (1:1) */
-    background-color: #444; 
+    /* ➡️ CORREÇÃO: Mude a cor padrão para branco para salvamento limpo */
+    background-color: #FFFFFF; 
+    
     user-select: none;
-    border: 1px solid #212121;
+    /* ➡️ Borda escura para a grade se destacar no fundo escuro do app */
+    border: 1px solid #777; 
+    cursor: crosshair;
 }
 
-/* Estilos dos Componentes de Opção */
+/* Estilos dos Componentes de Opção (ajustados para cor escura) */
 .option-title {
     color: #ebebeb;
     font-size: 1rem;
@@ -80,13 +86,65 @@ aside {
 
 .input-size {
     width: 100%;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #212121;
+    outline: none;
     margin: 10px 0 20px;
 }
 
+.input-color {
+    appearance: none;
+    width: 42px;
+    height: 45px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 5px 0 15px;
+}
+.input-color::-webkit-color-swatch {
+    border-radius: 50px;
+    border: 2px solid #ebebeb;
+}
+
+.used-colors {
+    margin-top: 10px;
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.button-save {
+    width: 100%;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-top: 30px;
+    background-color: #0581F3; /* Cor de destaque */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.button-save:hover {
+    background-color: #0465c4;
+}
+
+
+/* REGRAS DE SALVAMENTO (Para o html2canvas) */
 .saving-mode .pixel {
-    /* Remove a borda branca que simula a grade */
+    /* ➡️ ESSENCIAL: Remove a borda para não salvar a grade */
     border: none !important; 
-    
-    /* Faz os pixels não pintados ficarem transparentes ou brancos (se você quiser um fundo branco) */
-    background-color: transparent !important; 
+}
+.saving-mode .canvas, .saving-mode .row {
+    /* Remove o gap entre os pixels para evitar linhas brancas finas */
+    gap: 0px !important;
+}
+.saving-mode .canvas {
+    /* Garante que o canvas não tenha margem superior ao salvar */
+    margin-top: 0 !important;
 }
