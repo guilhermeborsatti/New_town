@@ -1,0 +1,85 @@
+/* Importação da Fonte */
+/* É essencial usar uma fonte que pareça "pixelada" */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+/* Alternativamente, você pode usar a 'VT323' que é mais legível, mas não tem o mesmo efeito */
+
+/* --- Configurações Gerais --- */
+body {
+    /* Define o fundo como a imagem da cidade pixel art */
+    /* Você precisará de uma imagem de fundo (ex: city-background.png) 
+       e salvá-la no seu projeto (ex: assets/city-background.png) */
+    background-image: url('cidade.png'); /* **IMPORTANTE: MUDAR O NOME DO ARQUIVO SE NECESSÁRIO** */
+    background-size: cover; /* Garante que a imagem cubra toda a tela */
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100vh; /* Ocupa 100% da altura da viewport */
+    margin: 0;
+    display: flex; /* Para centralizar o menu */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: flex-start; /* Alinha o menu um pouco para cima (ajuste conforme o desejado) */
+    padding-top: 50px; /* Espaçamento do topo */
+}
+
+/* --- Estilo do Menu (Contêiner) --- */
+.menu {
+    /* Fundo levemente opaco e arredondado, como na imagem */
+    background-color: rgba(255, 255, 255, 0.5); /* Branco com 50% de opacidade */
+    padding: 30px 40px;
+    border-radius: 15px; /* Bordas arredondadas */
+    /* Efeito de sombreamento sutil para dar profundidade ao contêiner */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 200px; /* Largura do contêiner do menu */
+}
+
+/* --- Estilo do Título H1 --- */
+.menu h1 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 32px;
+    color: white;
+    margin-bottom: 40px;
+    letter-spacing: 5px; /* Espaçamento entre letras */
+    /* Efeito de "borda" pixelada no texto usando text-shadow */
+    text-shadow: 
+        -2px -2px 0 #000,  
+         2px -2px 0 #000,
+        -2px  2px 0 #000,
+         2px  2px 0 #000,
+         4px  4px 0 #90c2e7; /* Sombra com deslocamento para o efeito 3D */
+}
+
+/* --- Estilo dos Botões (e links contendo botões) --- */
+.menu a {
+    text-decoration: none; /* Remove sublinhado dos links */
+    display: block; /* Garante que o link ocupe a largura total */
+    margin-bottom: 20px; /* Espaçamento entre os botões */
+}
+
+.menu button {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    width: 100%; /* Botões ocupam a largura do contêiner .menu */
+    padding: 12px 0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: #444; /* Cor do texto do botão */
+    background-color: #f0f0f0; /* Cor de fundo do botão (clara) */
+    /* Efeito de sombra sutil para dar o visual "pressionável" */
+    box-shadow: 0 4px #aaa, 0 8px 10px rgba(0,0,0,0.2); /* Sombra para o efeito 3D */
+    transition: all 0.05s ease; /* Transição suave para o efeito hover/active */
+}
+
+/* --- Efeito Hover e Active nos Botões --- */
+.menu button:hover {
+    background-color: #fff; /* Fica mais claro ao passar o mouse */
+    transform: translateY(-1px); /* Leve levantamento */
+    box-shadow: 0 5px #999, 0 8px 12px rgba(0,0,0,0.3);
+}
+
+.menu button:active {
+    /* Efeito de "pressionar" */
+    transform: translateY(3px); 
+    box-shadow: 0 2px #999, 0 4px 6px rgba(0,0,0,0.1); 
+}

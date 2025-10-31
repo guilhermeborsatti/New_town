@@ -13,8 +13,12 @@
       <a href="game.php">
         <button>Jogar</button>
       </a>
-      <button>Opções</button>
-      <button>Sair</button>
+      <a href="teste.php">
+    <button>Criatividade</button>
+</a>
+<a href="home.php">
+    <button>Sair</button>
+</a>
     </div>
   </body>
 </html>
