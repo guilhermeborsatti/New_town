@@ -243,7 +243,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <button type="submit" class="btn btn-primary">💾 Salvar Alterações</button>
-            <a href="game.html" class="btn btn-secondary">🎮 Voltar para o Jogo</a>
+            <a href="game.php" class="btn btn-secondary">🎮 Voltar para o Jogo</a>
             <a href="home.php" class="btn btn-secondary" style="background: #495057; margin-top: 10px;">🏠 Voltar para Home</a>
         </form>
     </div>
